@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: openex-backend
+
+  # Database Configuration
+  datasource:
+    (url: ${DB_URL:jdbc:postgresql://localhost:5432/openex}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  # JPA Configuration
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  # Flyway Configuration (Database Migrations)
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    table: flyway_schema_history
+
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  # Session Configuration
+  session:
+    store-type: redis
+
+  # Security Configuration (for JWT later)
+  security:
+    jwt:
+      secret: ${JWT_SECRET:your-very-secure-secret-key-for-development-only}
+      expiration: 86400000
+
+logging:
+  level:
+    com.rebellion.openex: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.flywaydb: DEBUG
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+---
+
+# Development Profile (used when running locally)
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  flyway:
+    enabled: false

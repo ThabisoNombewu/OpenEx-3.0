@@ -1,12 +1,14 @@
+
+#local
 spring:
   application:
     name: openex-backend
 
   # Database Configuration
   datasource:
-    (url: ${DB_URL:jdbc:postgresql://localhost:5432/openex}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/openex
+    username: openex_user
+    password: "0p3n3)("
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10

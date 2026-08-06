@@ -19,16 +19,9 @@ java {
 repositories {
 	mavenCentral()
 	maven {
-		url = uri("http://repo.maven.apache.org/maven2/")
-		isAllowInsecureProtocol = true
-	}
-	maven {
 		url = uri("https://repo.spring.io/release")
 	}
-	maven {
-		url = uri("http://repo.spring.io/release")
-		isAllowInsecureProtocol = true
-	}
+
 }
 
 dependencies {
@@ -51,7 +44,7 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
-	implementation("org.flywaydb:flyway-database-postgresql")
+	implementation("org.flywaydb:flyway-database-postgresql:10.17.0")
 }
 
 tasks.withType<KotlinCompile> {

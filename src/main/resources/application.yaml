@@ -55,7 +55,7 @@ spring:
   # Security Configuration (for JWT later)
   security:
     jwt:
-      secret: ${JWT_SECRET:your-very-secure-secret-key-for-development-only}
+      secret: ${JWT_SECRET}
       expiration: 86400000
 
 logging:

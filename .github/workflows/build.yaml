@@ -2,7 +2,7 @@ name: Build and test
 
 on:
   push:
-    branches: ["feature/setup-project-structure"]
+    branches: ["feature/authentication-jwt"]
   pull_request:
 
 permissions:
@@ -20,9 +20,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: openex_test
-          POSTGRES_USER: openex
-          POSTGRES_PASSWORD: openex
+          POSTGRES_DB: ${POSTGRES_DB}
+          POSTGRES_USER: ${POSTGRES_USER}
+          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         ports:
           - 5432:5432
         options: >-
@@ -58,6 +58,6 @@ jobs:
       - name: Build and test
         run: ./gradlew build -x test
         env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/openex_test
-          SPRING_DATASOURCE_USERNAME: openex
-          SPRING_DATASOURCE_PASSWORD: openex
+          SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+          SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+          SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}

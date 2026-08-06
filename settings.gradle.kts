@@ -4,15 +4,7 @@ pluginManagement {
         maven {
             url = uri("https://repo.spring.io/release")
         }
-        maven {
-            url = uri("http://repo.spring.io/release")
-            isAllowInsecureProtocol = true
-        }
-        mavenCentral()
-        maven {
-            url = uri("http://repo.maven.apache.org/maven2/")
-            isAllowInsecureProtocol = true
-        }
+
     }
 }
 

@@ -4,12 +4,14 @@ import com.openex.backend.dto.LoginRequest
 import com.openex.backend.dto.LoginResponse
 import com.openex.backend.repository.UserRepository
 import com.openex.backend.security.JwtService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
     private val userRepository: UserRepository,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     fun login(request: LoginRequest): LoginResponse {
@@ -17,7 +19,9 @@ class AuthService(
         val user = userRepository.findByUsername(request.username)
             ?: throw RuntimeException("Invalid username or password")
 
-        // Password validation will be added later
+        if (!passwordEncoder.matches(request.password, user.password)) {
+            throw RuntimeException("Invalid username or password")
+        }
 
         val token = jwtService.generateToken(user.username)
 

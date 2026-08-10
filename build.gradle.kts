@@ -45,6 +45,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 	implementation("org.flywaydb:flyway-database-postgresql:10.17.0")
+	implementation("me.paulschwarz:spring-dotenv:5.0.1")
 }
 
 tasks.withType<KotlinCompile> {

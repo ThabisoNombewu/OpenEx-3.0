@@ -40,4 +40,3 @@ out/
 .kotlin
 
 application-local.yml
-.env

@@ -26,3 +26,10 @@ export const register = (username, password) =>
   request('/auth/register', { method: 'POST', body: JSON.stringify({ username, password }) });
 
 export const getBalances = () => request('/wallets/balances', { method: 'GET' });
+
+export const placeOrder = (order) =>
+  request('/orders', {
+    method: 'POST',
+    headers: { 'Idempotency-Key': crypto.randomUUID() },
+    body: JSON.stringify(order),
+  });

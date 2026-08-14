@@ -78,4 +78,8 @@ class OrderService(
     fun getOrdersByStatus(status: OrderStatus): List<Order> {
         return orderRepository.findAllByStatus(status)
     }
+
+    fun getPendingOrders(): List<Order> {
+        return orderRepository.findAllByStatus(OrderStatus.PENDING)
+    }
 }

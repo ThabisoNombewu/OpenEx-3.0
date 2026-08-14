@@ -5,6 +5,8 @@ import com.openex.backend.dto.OrderResponse
 import com.openex.backend.entity.OrderSide
 import com.openex.backend.entity.OrderType
 import com.openex.backend.service.OrderService
+import com.openex.backend.service.MatchingEngineService
+import com.openex.backend.service.OrderBookSnapshot
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,7 +16,8 @@ import java.util.UUID
 @RestController
 @RequestMapping("/orders")
 class OrderController(
-    private val orderService: OrderService
+    private val orderService: OrderService,
+    private val matchingEngineService: MatchingEngineService
 ) {
 
     @PostMapping
@@ -65,7 +68,12 @@ class OrderController(
             idempotencyKey = idempotencyUUID
         )
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(OrderResponse.fromOrder(order))
+        // Process the order through the matching engine
+        val trades = matchingEngineService.processOrder(order)
+
+        // Update the order with the new status and filled quantity
+        val updatedOrder = orderService.findById(order.id)
+        return ResponseEntity.status(HttpStatus.CREATED).body(OrderResponse.fromOrder(updatedOrder))
     }
 
     @GetMapping
@@ -79,5 +87,11 @@ class OrderController(
     fun getOrder(@PathVariable orderId: UUID): ResponseEntity<OrderResponse> {
         val order = orderService.findById(orderId)
         return ResponseEntity.ok(OrderResponse.fromOrder(order))
+    }
+
+    @GetMapping("/book")
+    fun getOrderBook(): ResponseEntity<OrderBookSnapshot> {
+        val orderBook = matchingEngineService.getOrderBook()
+        return ResponseEntity.ok(orderBook)
     }
 }

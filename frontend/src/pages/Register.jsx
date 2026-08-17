@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { login } from '../api/client';
+import { useNavigate } from 'react-router-dom';
+import { register } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
-function Login() {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,17 +14,17 @@ function Login() {
     e.preventDefault();
     setError('');
     try {
-      const data = await login(username, password);
+      const data = await register(username, password);
       setAuth(data.token, data.username);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid username or password');
+      setError('Registration failed — username may already be taken');
     }
   };
 
   return (
     <div style={{ padding: '2rem', maxWidth: '320px' }}>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
           <label>Username</label>
@@ -47,13 +47,10 @@ function Login() {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" style={{ padding: '0.5rem 1rem' }}>Log In</button>
+        <button type="submit" style={{ padding: '0.5rem 1rem' }}>Register</button>
       </form>
-      <p style={{ marginTop: '1rem' }}>
-        No account? <Link to="/register">Register</Link>
-      </p>
     </div>
   );
 }
 
-export default Login;
+export default Register;

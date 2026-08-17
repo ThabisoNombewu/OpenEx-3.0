@@ -3,6 +3,7 @@ import { placeOrder } from '../api/client';
 
 function Trading() {
   const [side, setSide] = useState('BUY');
+  const [currencyPair, setCurrencyPair] = useState('BTC/USD');
   const [orderType, setOrderType] = useState('LIMIT');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -13,6 +14,7 @@ function Trading() {
     setStatus(null);
 
     const order = {
+      currencyPair,
       side,
       orderType,
       quantity: parseFloat(quantity),
@@ -33,6 +35,13 @@ function Trading() {
     <div style={{ padding: '2rem', maxWidth: '360px' }}>
       <h1>Trading</h1>
       <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Currency Pair</label>
+          <select value={currencyPair} onChange={(e) => setCurrencyPair(e.target.value)} style={{ display: 'block', width: '100%', padding: '0.5rem' }}>
+            <option value="BTC/USD">BTC/USD</option>
+          </select>
+        </div>
+
         <div style={{ marginBottom: '1rem' }}>
           <label>Side</label>
           <select value={side} onChange={(e) => setSide(e.target.value)} style={{ display: 'block', width: '100%', padding: '0.5rem' }}>

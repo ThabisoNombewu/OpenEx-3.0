@@ -21,7 +21,6 @@ repositories {
 	maven {
 		url = uri("https://repo.spring.io/release")
 	}
-
 }
 
 dependencies {
@@ -38,13 +37,23 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	runtimeOnly("org.postgresql:postgresql")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	// Embedded Redis for tests
+	testImplementation("it.ozimov:embedded-redis:0.7.3")
+
+	// Testing with Logback conflict fix
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(group = "org.slf4j", module = "slf4j-simple")
+	}
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("ch.qos.logback:logback-classic")
+
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 	implementation("org.flywaydb:flyway-database-postgresql:10.17.0")
+	implementation("me.paulschwarz:spring-dotenv:5.0.1")
 }
 
 tasks.withType<KotlinCompile> {

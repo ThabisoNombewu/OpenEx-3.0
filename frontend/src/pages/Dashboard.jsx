@@ -1,31 +1,106 @@
-import { useEffect, useState } from 'react';
-import { getBalances } from '../api/client';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Dashboard() {
-  const [balances, setBalances] = useState(null);
-  const [error, setError] = useState('');
   const { username } = useAuth();
 
-  useEffect(() => {
-    getBalances()
-      .then(setBalances)
-      .catch(() => setError('Failed to load balances'));
-  }, []);
-
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Dashboard</h1>
-      <p>Welcome, {username}</p>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {balances && (
-        <ul>
-          {Object.entries(balances).map(([currency, amount]) => (
-            <li key={currency}>{currency}: {amount}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <main className="dashboard-page">
+
+      <section className="dashboard-header">
+        <p className="eyebrow">
+          OVERVIEW
+        </p>
+
+        <h1>
+          Welcome back, {username}
+        </h1>
+
+        <p>
+          Monitor your trading activity and access the live market.
+        </p>
+      </section>
+
+      <section className="dashboard-grid">
+
+        <div className="dashboard-card card">
+          <div className="dashboard-card-label">
+            Market
+          </div>
+
+          <div className="dashboard-card-value">
+            BTC / USDT
+          </div>
+        </div>
+
+        <div className="dashboard-card card">
+          <div className="dashboard-card-label">
+            Trading Status
+          </div>
+
+          <div
+            className="dashboard-card-value"
+            style={{ color: '#22c55e' }}
+          >
+            Online
+          </div>
+        </div>
+
+        <div className="dashboard-card card">
+          <div className="dashboard-card-label">
+            Platform
+          </div>
+
+          <div className="dashboard-card-value">
+            OpenEx 3.0
+          </div>
+        </div>
+
+      </section>
+
+      <section
+        className="card"
+        style={{
+          marginTop: '20px',
+          padding: '28px',
+        }}
+      >
+        <p className="eyebrow">
+          LIVE MARKETS
+        </p>
+
+        <h2 style={{ marginBottom: '8px' }}>
+          Ready to trade?
+        </h2>
+
+        <p
+          style={{
+            color: '#94a3b8',
+            marginBottom: '20px',
+          }}
+        >
+          Open the trading terminal to view the live order book
+          and place orders.
+        </p>
+
+        <Link
+          to="/trading"
+          style={{
+            display: 'inline-block',
+            padding: '11px 18px',
+            borderRadius: '8px',
+            background: '#6366f1',
+            color: '#fff',
+            textDecoration: 'none',
+            fontWeight: 700,
+            fontSize: '14px',
+          }}
+        >
+          Open Trading Terminal →
+        </Link>
+      </section>
+
+    </main>
   );
 }
 

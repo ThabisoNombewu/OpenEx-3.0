@@ -17,3 +17,8 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Garbage files
+'[165'
+pandas
+Readme

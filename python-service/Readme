@@ -1,0 +1,110 @@
+# OpenEx 3.0 - AI Service
+
+## Overview
+AI service for OpenEx 3.0 providing market data simulation and AI-powered trading assistant using Flask, LangChain, and Ollama.
+
+## Prerequisites
+* Python 3.12+
+* Ollama with `llama3.2:3b` model
+
+## Quick Start
+
+### 1. Setup Python Environment
+```bash
+cd python-service
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Install and Run Ollama
+```bash
+curl -fsSL https://ollama.com | sh
+ollama pull llama3.2:3b
+ollama serve
+```
+
+### 3. Start the Service
+```bash
+python app.py
+```
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/health` | Health check with AI status |
+| `GET` | `/api/market/history` | Market data history (random walk) |
+| `GET` | `/api/market/current` | Current market price |
+| `POST` | `/api/chat` | AI chat with ExBot |
+| `GET` | `/api/ai/status` | AI availability status |
+
+## Testing
+
+### Health Check
+```bash
+curl http://localhost:5000/api/health
+```
+
+### Market Data
+```bash
+# Get 50 historical ticks
+curl http://localhost:5000/api/market/history?ticks=50
+
+# Get current price
+curl http://localhost:5000/api/market/current
+```
+
+### AI Chat
+```bash
+curl -X POST http://localhost:5000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What is the current market price?"}'
+```
+
+## Project Structure
+```text
+python-service/
+├── app.py              # Flask application
+├── ai_agent.py         # LangChain AI agent
+├── market_data.py      # Market simulator
+├── requirements.txt    # Python dependencies
+└── README.md           # Documentation
+```
+
+## Features
+
+### Market Simulator
+* Random walk price generation with drift
+* 20 and 50-period Simple Moving Averages
+* Configurable parameters (volatility, drift)
+
+### AI Assistant (ExBot)
+* LangChain with Ollama (`llama3.2:3b`)
+* Professional trading persona
+* Memory for conversation history
+* No financial advice policy
+
+## License
+MIT License
+
+Copyright (c) 2026 OpenEx 3.0 Contributors(Thabiso A. Nombewu & Tshegofatso P. Selahle)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+

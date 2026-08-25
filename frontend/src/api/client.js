@@ -42,6 +42,8 @@ export const register = (username, password, firstName, lastName) =>
 
 export const getBalances = () => request('/wallets/balances', { method: 'GET' });
 
+export const getOrderHistory = () => request('/orders', { method: 'GET' });
+
 export const placeOrder = (order) =>
   request('/orders', {
     method: 'POST',

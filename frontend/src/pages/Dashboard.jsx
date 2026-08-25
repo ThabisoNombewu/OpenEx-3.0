@@ -3,6 +3,17 @@ import { useAuth } from '../context/AuthContext';
 
 function Dashboard() {
   const { username } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  const [balances, setBalances] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    getBalances()
+      .then(setBalances)
+      .catch(() => setError('Failed to load balances'))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <main className="dashboard-page">
@@ -56,6 +67,36 @@ function Dashboard() {
           </div>
         </div>
 
+      </section>
+
+      <section
+        className="card"
+        style={{
+          marginTop: '20px',
+          padding: '28px',
+        }}
+      >
+        <p className="eyebrow">
+          YOUR BALANCES
+        </p>
+
+        {loading && <p style={{ color: '#94a3b8' }}>Loading balances...</p>}
+        {error && <p style={{ color: '#ef4444' }}>{error}</p>}
+
+        {!loading && !error && balances && Object.keys(balances).length === 0 && (
+          <p style={{ color: '#94a3b8' }}>No balances yet</p>
+        )}
+
+        {!loading && !error && balances && Object.keys(balances).length > 0 && (
+          <div className="dashboard-grid" style={{ marginTop: '12px' }}>
+            {Object.entries(balances).map(([currency, amount]) => (
+              <div className="dashboard-card card" key={currency}>
+                <div className="dashboard-card-label">{currency}</div>
+                <div className="dashboard-card-value">{amount}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section

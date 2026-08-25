@@ -1,23 +1,39 @@
-const BASE_URL = 'http://localhost:8080/api';
+import { generateUUID } from '../utils/uuid';
+// ...
+headers: { 'Idempotency-Key': generateUUID() },
+
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 async function request(path, options = {}) {
   const token = localStorage.getItem('jwt_token');
-
   const headers = {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };
 
-  const response = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  let response;
+  try {
+    response = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  } catch (err) {
+    throw new Error('Unable to reach the server. Check your connection and try again.');
+  }
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText || `Request failed with status ${response.status}`);
+    if (response.status === 401) {
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('username');
+      window.location.href = '/login';
+      throw new Error('Session expired. Please log in again.');
+    }
+    const errorText = await response.text().catch(() => '');
+    throw new Error(errorText || `Request failed (${response.status})`);
   }
 
   return response.json();
 }
+
 
 export const login = (username, password) =>
   request('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) });

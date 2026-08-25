@@ -1,121 +1,77 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { register } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 
 function Register() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError('');
-    setSuccess('');
-
     try {
-      await register(username, password);
-
-      setSuccess('Account created successfully. Redirecting to login...');
-
-      setTimeout(() => {
-        navigate('/login');
-      }, 1000);
+      const data = await register(username, password, firstName, lastName);
+      setAuth(data.token, data.username);
+      navigate('/dashboard');
     } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-        'Unable to create account'
-      );
+      setError('Registration failed — username may already be taken');
     }
   };
 
   return (
-    <main className="auth-page">
-      <div className="auth-container">
-
-        <div className="auth-brand">
-          <h1>OpenEx</h1>
-          <p>Decentralized Trading Terminal</p>
+    <div style={{ padding: '2rem', maxWidth: '320px' }}>
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>First Name</label>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
+            required
+          />
         </div>
-
-        <section className="auth-card card">
-          <h2>Create account</h2>
-
-          <p className="auth-description">
-            Create your account to start trading.
-          </p>
-
-          {error && (
-            <div className="auth-error">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="order-status success">
-              {success}
-            </div>
-          )}
-
-          <form
-            onSubmit={handleSubmit}
-            className="auth-form"
-          >
-            <div className="form-group">
-              <label htmlFor="username">
-                Username
-              </label>
-
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) =>
-                  setUsername(e.target.value)
-                }
-                placeholder="Choose a username"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">
-                Password
-              </label>
-
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) =>
-                  setPassword(e.target.value)
-                }
-                placeholder="Choose a password"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="auth-submit"
-            >
-              Create Account
-            </button>
-          </form>
-
-          <div className="auth-footer">
-            Already have an account?{' '}
-            <Link to="/login">
-              Sign in
-            </Link>
-          </div>
-        </section>
-
-      </div>
-    </main>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Last Name</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
+            required
+          />
+        </div>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
+            required
+          />
+        </div>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
+            required
+          />
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button type="submit" style={{ padding: '0.5rem 1rem' }}>Register</button>
+      </form>
+    </div>
   );
 }
 

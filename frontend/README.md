@@ -1,16 +1,51 @@
-# React + Vite
+# OpenEx 3.0 — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for the OpenEx 3.0 simulated crypto exchange and AI trading terminal.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 18 (Vite)
+- React Router — client-side routing
+- React Context — auth state management
+- STOMP over SockJS (`@stomp/stompjs`, `sockjs-client`) — live order book updates
+- Fetch API — REST calls to the backend
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 18+
+- Backend running locally on `http://localhost:8080` (see backend README)
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+cp .env.example .env
+```
+
+Edit `.env` and confirm the values match your backend setup:
+
+
+## Running locally
+
+```bash
+npm run dev
+```
+
+App runs at `http://localhost:5173`.
+
+## Features implemented
+
+- **Authentication** — login and registration forms, JWT stored client-side, protected routes redirect to `/login` when unauthenticated
+- **Wallet dashboard** — displays live account balances fetched from the backend, with loading/error/empty states
+- **Trading terminal** — place limit/market buy/sell orders across 10 currency pairs (BTC, ETH, SOL, BNB, XRP, ADA, DOGE, DOT, LINK, MATIC), each order sent with a unique `Idempotency-Key` header
+- **Order history** — table of past orders on the trading page, refreshes automatically after a new order is placed
+- **Live order book** — WebSocket connection (STOMP/SockJS) subscribed to `/topic/orderbook` for real-time updates
+
+## Known limitations / in progress
+
+- Registration form collects `firstName`/`lastName`, but the backend doesn't yet persist these fields (User entity only has `username`/`password`/`role`) — pending backend update
+- Order history table expects a `GET /api/orders` endpoint that doesn't exist yet — UI is built and will render correctly once the endpoint is added
+- Currency pair selection on the trading form is currently cosmetic — the backend matching engine only supports a single implicit trading pair (multi-pair routing not yet implemented)
+- Coin price charts are planned for a later stage, once the Python market-data service (Flask/Pandas) is available to supply real data
+
+## Project structure

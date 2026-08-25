@@ -4,6 +4,8 @@ import { register } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
 function Register() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,7 +16,7 @@ function Register() {
     e.preventDefault();
     setError('');
     try {
-      const data = await register(username, password);
+      const data = await register(username, password, firstName, lastName);
       setAuth(data.token, data.username);
       navigate('/dashboard');
     } catch (err) {
@@ -26,6 +28,26 @@ function Register() {
     <div style={{ padding: '2rem', maxWidth: '320px' }}>
       <h1>Register</h1>
       <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>First Name</label>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
+            required
+          />
+        </div>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Last Name</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
+            required
+          />
+        </div>
         <div style={{ marginBottom: '1rem' }}>
           <label>Username</label>
           <input

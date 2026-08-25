@@ -1,21 +1,27 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { login } from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import AnimatedBackground from '../components/AnimatedBackground';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
   const { setAuth } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
     try {
       const data = await login(username, password);
+
       setAuth(data.token, data.username);
+
       navigate('/dashboard');
     } catch (err) {
       setError('Invalid username or password');
@@ -23,37 +29,87 @@ function Login() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '320px' }}>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
-            required
-          />
+  <div style={{ position: 'relative' }}>
+    <AnimatedBackground />
+    <main className="auth-page" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="auth-container">
+
+        <div className="auth-brand">
+          <h1>OpenEx</h1>
+          <p>Decentralized Trading Terminal</p>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ display: 'block', width: '100%', padding: '0.5rem' }}
-            required
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" style={{ padding: '0.5rem 1rem' }}>Log In</button>
-      </form>
-      <p style={{ marginTop: '1rem' }}>
-        No account? <Link to="/register">Register</Link>
-      </p>
-    </div>
-  );
+
+        <section className="auth-card card">
+          <h2>Welcome back</h2>
+
+          <p className="auth-description">
+            Sign in to access your trading dashboard.
+          </p>
+
+          {error && (
+            <div className="auth-error">
+              {error}
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSubmit}
+            className="auth-form"
+          >
+            <div className="form-group">
+              <label htmlFor="username">
+                Username
+              </label>
+
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) =>
+                  setUsername(e.target.value)
+                }
+                placeholder="Enter your username"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">
+                Password
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="auth-submit"
+            >
+              Sign In
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            Don't have an account?{' '}
+            <Link to="/register">
+              Create one
+            </Link>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+);
 }
 
 export default Login;

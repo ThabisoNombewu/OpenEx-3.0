@@ -1,7 +1,4 @@
 import { generateUUID } from '../utils/uuid';
-// ...
-headers: { 'Idempotency-Key': generateUUID() },
-
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -34,18 +31,22 @@ async function request(path, options = {}) {
   return response.json();
 }
 
-
 export const login = (username, password) =>
   request('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) });
 
-export const register = (username, password) =>
-  request('/auth/register', { method: 'POST', body: JSON.stringify({ username, password }) });
+export const register = (username, password, firstName, lastName) =>
+  request('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ username, password, firstName, lastName }),
+  });
 
 export const getBalances = () => request('/wallets/balances', { method: 'GET' });
+
+export const getOrderHistory = () => request('/orders', { method: 'GET' });
 
 export const placeOrder = (order) =>
   request('/orders', {
     method: 'POST',
-    headers: { 'Idempotency-Key': crypto.randomUUID() },
+    headers: { 'Idempotency-Key': generateUUID() },
     body: JSON.stringify(order),
   });

@@ -7,10 +7,15 @@ function NavBar() {
   const { token, username, logout } = useAuth();
 
   const linkStyle = (path) => ({
-    marginRight: '1.5rem',
     textDecoration: 'none',
-    color: location.pathname === path ? '#4f46e5' : '#333',
-    fontWeight: location.pathname === path ? 600 : 400,
+    color:
+      location.pathname === path
+        ? '#818cf8'
+        : '#94a3b8',
+    fontWeight:
+      location.pathname === path
+        ? 600
+        : 400,
   });
 
   const handleLogout = () => {
@@ -18,19 +23,44 @@ function NavBar() {
     navigate('/login');
   };
 
+  // Don't show the application navbar on authentication pages
+  if (!token) {
+    return null;
+  }
+
   return (
-    <nav style={{ padding: '1rem 2rem', borderBottom: '1px solid #e5e5e5', display: 'flex', justifyContent: 'space-between' }}>
-      <div>
-        <Link to="/dashboard" style={linkStyle('/dashboard')}>Dashboard</Link>
-        <Link to="/trading" style={linkStyle('/trading')}>Trading</Link>
-        {!token && <Link to="/login" style={linkStyle('/login')}>Login</Link>}
+    <nav className="navbar">
+      <Link to="/dashboard" className="navbar-brand">
+        OpenEx
+      </Link>
+
+      <div className="navbar-links">
+        <Link
+          to="/dashboard"
+          style={linkStyle('/dashboard')}
+        >
+          Dashboard
+        </Link>
+
+        <Link
+          to="/trading"
+          style={linkStyle('/trading')}
+        >
+          Trading
+        </Link>
       </div>
-      {token && (
-        <div>
-          <span style={{ marginRight: '1rem' }}>{username}</span>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      )}
+
+      <div className="navbar-user">
+        <span>{username}</span>
+
+        <button
+          type="button"
+          className="logout-button"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </div>
     </nav>
   );
 }

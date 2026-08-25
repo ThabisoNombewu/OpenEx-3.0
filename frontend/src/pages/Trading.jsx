@@ -39,6 +39,15 @@ function Trading() {
           <label>Currency Pair</label>
           <select value={currencyPair} onChange={(e) => setCurrencyPair(e.target.value)} style={{ display: 'block', width: '100%', padding: '0.5rem' }}>
             <option value="BTC/USD">BTC/USD</option>
+            <option value="ETH/USD">ETH/USD</option>
+            <option value="SOL/USD">SOL/USD</option>
+            <option value="BNB/USD">BNB/USD</option>
+            <option value="XRP/USD">XRP/USD</option>
+            <option value="ADA/USD">ADA/USD</option>
+            <option value="DOGE/USD">DOGE/USD</option>
+            <option value="DOT/USD">DOT/USD</option>
+            <option value="LINK/USD">LINK/USD</option>
+            <option value="MATIC/USD">MATIC/USD</option>
           </select>
         </div>
 

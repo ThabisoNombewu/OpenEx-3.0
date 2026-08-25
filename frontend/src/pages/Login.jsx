@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { login } from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import AnimatedBackground from '../components/AnimatedBackground';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -28,7 +29,9 @@ function Login() {
   };
 
   return (
-    <main className="auth-page">
+  <div style={{ position: 'relative' }}>
+    <AnimatedBackground />
+    <main className="auth-page" style={{ position: 'relative', zIndex: 1 }}>
       <div className="auth-container">
 
         <div className="auth-brand">
@@ -105,7 +108,8 @@ function Login() {
 
       </div>
     </main>
-  );
+  </div>
+);
 }
 
 export default Login;

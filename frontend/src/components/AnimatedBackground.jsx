@@ -1,20 +1,16 @@
-import { useMemo } from 'react';
-
 const SYMBOLS = ['₿', 'Ξ', '◎', '$', '€'];
 
-function AnimatedBackground() {
-  const coins = useMemo(() => {
-    return Array.from({ length: 18 }, (_, i) => ({
-      id: i,
-      symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-      left: Math.random() * 100,
-      size: 16 + Math.random() * 28,
-      duration: 12 + Math.random() * 14,
-      delay: Math.random() * 10,
-      opacity: 0.08 + Math.random() * 0.12,
-    }));
-  }, []);
+const COINS = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
+  left: Math.random() * 100,
+  size: 16 + Math.random() * 28,
+  duration: 12 + Math.random() * 14,
+  delay: Math.random() * 10,
+  opacity: 0.08 + Math.random() * 0.12,
+}));
 
+function AnimatedBackground() {
   return (
     <div
       style={{
@@ -25,7 +21,7 @@ function AnimatedBackground() {
         pointerEvents: 'none',
       }}
     >
-      {coins.map((coin) => (
+      {COINS.map((coin) => (
         <span
           key={coin.id}
           style={{

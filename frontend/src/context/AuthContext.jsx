@@ -27,6 +27,9 @@ export function AuthProvider({ children }) {
   );
 }
 
+// The hook is kept here to preserve the existing public API; exclude it from
+// the Fast Refresh component-export check.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }

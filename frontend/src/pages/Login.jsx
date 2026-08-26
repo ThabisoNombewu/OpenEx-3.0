@@ -24,6 +24,7 @@ function Login() {
 
       navigate('/dashboard');
     } catch (err) {
+      console.error(err);
       setError('Invalid username or password');
     }
   };

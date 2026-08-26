@@ -12,6 +12,7 @@ import Dashboard from './pages/Dashboard';
 import Trading from './pages/Trading';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ChatWidget from './components/ChatWidget';
 
 function ProtectedRoute({ children }) {
   const { token } = useAuth();
@@ -33,6 +34,7 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <NavBar />
+      <ChatWidget />
 
       <Routes>
         <Route

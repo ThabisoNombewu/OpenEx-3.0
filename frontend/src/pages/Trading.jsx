@@ -13,11 +13,15 @@ function Trading() {
   const [historyError, setHistoryError] = useState('');
 
   const fetchOrderHistory = () => {
-    setHistoryLoading(true);
-    getOrderHistory()
-      .then(setOrderHistory)
-      .catch(() => setHistoryError('Failed to load order history'))
-      .finally(() => setHistoryLoading(false));
+  getOrderHistory()
+    .then(setOrderHistory)
+    .catch(() => setHistoryError('Failed to load order history'))
+    .finally(() => setHistoryLoading(false));
+};
+
+const refreshOrderHistory = () => {
+  setHistoryLoading(true);
+  fetchOrderHistory();
 };
 
 useEffect(() => {
@@ -41,10 +45,11 @@ useEffect(() => {
       setStatus({ type: 'success', message: `Order placed: ${result.id ?? 'submitted'}` });
       setPrice('');
       setQuantity('');
-      fetchOrderHistory();
+      refreshOrderHistory();
     } catch (err) {
-      setStatus({ type: 'error', message: 'Failed to place order' });
-    }
+  console.error(err);
+  setStatus({ type: 'error', message: 'Failed to place order' });
+}
   };
 
   return (
